@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { Fragment, useRef } from 'react'
+import { useReactToPrint } from 'react-to-print';
+import ComponentToPrint from './ComponentToPrint'
+
+const pageStyle ="@page { size: letter landscape; }";
 
 function App() {
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    pageStyle
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <div style={{ display: "block" }}><ComponentToPrint ref={componentRef} /></div>
+      <div className="app-container">
+        <button onClick={handlePrint}>Imprimir</button>
+      </div>
+      <style jsx>{`
+        .app-container {
+          
+        }
+        .app-container button {
+          padding: 1em;
+          font-size: 1em;
+          width: auto;
+          font-weight: 600;
+          cursor: pointer;
+        }
+      `}</style>
+    </Fragment>
   );
 }
 
